@@ -64,7 +64,7 @@ Now we have such options:
 * marker - custom Leaflet marker (optional)
 * proxyApiGeocodeUrl - your proxy url. Geocode requests will be send to that url. You don't need to specify API key. You'll recieve such parameters in GET request: text (search text), lang, key (API key), limit (suggestsLimit) (optional)
 * proxyApiFeatureUrl - your proxy url. Feature requests will be send to that url. You don't need to specify API key. You'll recieve such parameters in GET request: feature_id (feature id you are searching), lang, key (API key) (optional)
-* customFeatures - add your features. They will be displayed first in search results. (optional, array of objects, default = []). Each object should contain 3 fields: html (text, displayed in suggest), keywords (text filed, which contains words for searching), coords (array of two coordinate values of your feature)
+* customFeatures - add your features. They will be displayed first in search results. (optional, array of objects, default = []). Each object should contain 3 fields: html (text, displayed in suggest), keywords (text field, which contains words for searching), coords (array of two coordinate values of your feature)
 
 Be carefull when using your proxy server. You should return same JSON object to client side, which you recieve on your server side.
 
