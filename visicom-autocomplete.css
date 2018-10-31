@@ -1,0 +1,75 @@
+  html, body {
+      height: 100%;
+  }
+  
+  .visicom-autocomplete {
+    background: #fff;
+    position: relative;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.24);
+  }
+  .visicom-autocomplete .close {
+    width: 33px;
+    height: 33px;
+    position: absolute;
+    z-index: 10;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'%3E%3Cg fill='%23646464'%3E%3Cpath d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z'/%3E%3C/g%3E%3C/svg%3E") no-repeat 50% 50%;
+    border: none;
+    box-sizing: border-box;
+    display: none;
+  }
+  .visicom-autocomplete .close.visible {
+    display: block;
+  }
+  .visicom-autocomplete input {
+    font-weight: 300;
+    width: 100%;
+    box-sizing: border-box;
+    height: 35px;
+    border: 1px solid;
+    outline: none;
+    font-size: 14px;
+    color: #666;
+    padding: 5px 33px 5px 10px;
+  }
+
+  .visicom-autocomplete input::-ms-clear {
+    display: none;
+  }
+
+  .visicom-suggests {
+    width: 100%;
+    display: none;
+    min-height: 40px;
+    max-height: 330px;
+    position: absolute;
+    z-index: 2000;
+    border-top: 1px solid #f4f4f4;
+    border-left: 1px solid #f4f4f4;
+  }
+  .visicom-suggests.open {
+    display: block;
+  }
+  .visicom-suggests div {
+    border-top: 1px solid #f4f4f4;
+    box-shadow: 1px 0px 1px rgba(0, 0, 0, 0.24);
+    padding: 15px 10px;
+    font-size: 13px;
+    position: relative;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  visicom-suggests div:hover {
+    background: #f2f2f2;
+  }
+  
+  .visicom-suggests div:last-child {
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.24);
+  }
+
+  .visicom-suggests .selected {
+    background: #f2f2f2;
+  }
