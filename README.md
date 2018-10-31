@@ -60,7 +60,7 @@ Now we have such options:
 * maxCharsInSuggest - maximum count of chars, displayed in suggest(optional, default = 55)
 * lang - language for search (optional, default = 'local', you can use one of: 'local', 'uk', 'en', 'ru')
 * onSuggestSelected - function to call when suggest was selected (optional, default = () => console.log)
-* map - Leaflet map object. When suggest selected, it will zoom on selected suggest (optional)
+* map - Leaflet map object. When suggest selected, it will zoom on selected suggest (optional). If not specified, only onSuggestSelected function will be invoked
 * marker - custom Leaflet marker (optional)
 * proxyApiGeocodeUrl - your proxy url. Geocode requests will be send to that url. You don't need to specify API key. You'll recieve such parameters in GET request: text (search text), lang, key (API key), limit (suggestsLimit) (optional)
 * proxyApiFeatureUrl - your proxy url. Feature requests will be send to that url. You don't need to specify API key. You'll recieve such parameters in GET request: feature_id (feature id you are searching), lang, key (API key) (optional)
