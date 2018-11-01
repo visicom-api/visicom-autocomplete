@@ -57,8 +57,9 @@ Now we have such options:
 * minCahrs - minimum length of input query for search to start (optional, number, default = 3)
 * delay - delay between key pressed for search to start, ms (optional, number, default = 150)
 * suggestsLimit - maximum count of suggests to display (optional, number, default = 5)
-* maxCharsInSuggest - maximum count of chars, displayed in suggest(optional, default = 55)
+* maxCharsInSuggest - maximum count of chars, displayed in suggest (optional, default = 55)
 * lang - language for search (optional, default = 'local', you can use one of: 'local', 'uk', 'en', 'ru')
+* searchTextPrefix - this text will be put in the beginning of the input value. You can specify your city here (optional, default = '')
 * onSuggestSelected - function to call when suggest was selected (optional, default = () => console.log)
 * map - Leaflet map object. When suggest selected, it will zoom on selected suggest (optional). If not specified, only onSuggestSelected function will be invoked
 * marker - custom Leaflet marker (optional)

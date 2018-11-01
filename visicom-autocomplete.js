@@ -25,6 +25,7 @@ let visicomAutoComplete = (function(){
             suggestsLimit : 5,
             maxCharsInSuggest: 55,
             lang : 'local',
+            searchTextPrefix: '',
             customFeatures: [],
             onSuggestSelected : suggest => console.log('Suggest selected: ' + (suggest.html)),            
         };
@@ -293,8 +294,8 @@ let visicomAutoComplete = (function(){
 
         function makeGeocodeRequest(text){     
             let url = opt.proxyApiGeocodeUrl ?
-                `${opt.proxyApiGeocodeUrl}?text=${text}&lang=${opt.lang}&key=${opt.apiKey}&limit=${opt.suggestsLimit}` :
-                `${opt.apiUrl.replace('{lang}', opt.lang)}/geocode.json?text=${text}&key=${opt.apiKey}&limit=${opt.suggestsLimit}`;       
+                `${opt.proxyApiGeocodeUrl}?text=${opt.searchTextPrefix} ${text}&lang=${opt.lang}&key=${opt.apiKey}&limit=${opt.suggestsLimit}` :
+                `${opt.apiUrl.replace('{lang}', opt.lang)}/geocode.json?text=${opt.searchTextPrefix} ${text}&key=${opt.apiKey}&limit=${opt.suggestsLimit}`;       
             return fetch(url)
                 .then(data => data.json());                
         }
