@@ -50,7 +50,7 @@ let ac = new visicomAutoComplete({
 
 Now we have such options:
 * apiKey - your API key (required, if you don't specify proxy urls)
-* selector - autocomplete element div selector (required, default = '#visicom-autocomplete')
+* selector - autocomplete element div selector (optional, default = '#visicom-autocomplete')
 * width - width of the autocomplete element (optional, string, default = '400px')
 * height - height of the autocomplete element (optional, string, default = '35px')
 * placeholder - placeholder for input (optional, default = 'Search...')
