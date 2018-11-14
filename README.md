@@ -24,11 +24,11 @@ Get your API key and you are ready to use widget.
 Add imports on your page:
 
 ```html
-<link rel="stylesheet" href="https://raw.githubusercontent.com/visicom-api/visicom-autocomplete/master/visicom-autocomplete.min.css">
+<link rel="stylesheet" href="https://api.visicom.ua/apps/visicom-autocomplete/visicom-autocomplete.min.css">
 ```
 
 ```html
-<script src="https://raw.githubusercontent.com/visicom-api/visicom-autocomplete/master/visicom-autocomplete.min.js"></script>
+<script src="https://api.visicom.ua/apps/visicom-autocomplete/visicom-autocomplete.min.js"></script>
 ```
 
 Create element in your html file ('a' tag will dispappear, you shouldn't remove it):
@@ -79,7 +79,7 @@ Full example:
 <html lang="uk">
   <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-      <link rel="stylesheet" href="https://rawcdn.githack.com/visicom-api/visicom-autocomplete/8a745de427df007f3c11d709158cd343dfe86166/visicom-autocomplete.min.css">
+      <link rel="stylesheet" href="https://api.visicom.ua/apps/visicom-autocomplete/visicom-autocomplete.min.css">
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css">
   </head>
   <body>
@@ -90,7 +90,7 @@ Full example:
     <div id="map" style="width: 800px; height: 400px;"></div>
 
   </body>
-  <script type="text/javascript" src="https://rawcdn.githack.com/visicom-api/visicom-autocomplete/8a745de427df007f3c11d709158cd343dfe86166/visicom-autocomplete.min.js"></script>
+  <script type="text/javascript" src="https://api.visicom.ua/apps/visicom-autocomplete/visicom-autocomplete.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
   <script>
 
