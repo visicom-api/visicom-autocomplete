@@ -141,6 +141,11 @@ Full example:
 </html>
 ```
 
+## Browser support
+* Chrome
+* Firefox
+* Edge
+
 ## Changelog
 
 ### Version 0.0.2 beta - 2018/10/25
