@@ -26,6 +26,8 @@ let visicomAutoComplete = (function(){
             maxCharsInSuggest: 55,
             lang : 'local',
             searchTextPrefix: '',
+            includeCategories: [],
+            excludeCategories: [],
             customFeatures: [],
             onSuggestSelected : function(suggest){console.log('Suggest selected: ' + (suggest.html))},            
             displayDivSelector: null
@@ -186,6 +188,32 @@ let visicomAutoComplete = (function(){
                                 results.push(json);
                             }                    
                             
+                            if(opt.excludeCategories && opt.excludeCategories.length > 0){
+                                results = results.filter(function(feat){
+                                    if(!feat.properties || !feat.properties.categories){
+                                        return true;
+                                    }
+
+                                    return feat.properties.categories.split(",").every(function(cat){
+                                        return !opt.excludeCategories.includes(cat);
+                                    });
+
+                                });
+                            }
+
+                            if(opt.includeCategories && opt.includeCategories.length > 0){
+                                results = results.filter(function(feat){
+                                    if(!feat.properties || !feat.properties.categories){
+                                        return true;
+                                    }
+
+                                    return feat.properties.categories.split(",").some(function(cat){
+                                        return opt.includeCategories.includes(cat);
+                                    });
+
+                                });
+                            }
+
                             results.forEach(function(res){
                                 if(res.properties.name || res.properties.vitrine)
                                     suggests.push({
