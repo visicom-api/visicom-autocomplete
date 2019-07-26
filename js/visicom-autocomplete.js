@@ -1,6 +1,6 @@
 /*
     JavaScript visicomAutoComplete v0.0.2
-    Copyright (c) 2018 Andrey Kotelnikov / Visicom
+    Copyright (c) 2019 Andrey Kotelnikov / Visicom
     GitHub: https://github.com/visicom-api/visicom-autocomplete
     License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -11,15 +11,15 @@ let visicomAutoComplete = (function(){
 
         let opt = {
             selector : '#visicom-autocomplete',
-            apiUrl : `https://api.visicom.ua/data-api/4.0/{lang}/`,
+            apiUrl : 'https://api.visicom.ua/data-api/4.0/{lang}/',
             proxyApiGeocodeUrl: '',
             proxyApiFeatureUrl: '',
             apiKey : '',
             placeholder : 'Search...',
             minChars : 3,
             delay : 150,
-            width : '400px',
-            height : '35px',
+            width : '100%',
+            height: null,
             map : null,
             marker: null,
             suggestsLimit : 5,
@@ -27,19 +27,39 @@ let visicomAutoComplete = (function(){
             lang : 'local',
             searchTextPrefix: '',
             customFeatures: [],
-            onSuggestSelected : suggest => console.log('Suggest selected: ' + (suggest.html)),            
+            onSuggestSelected : function(suggest){console.log('Suggest selected: ' + (suggest.html))},            
+            displayDivSelector: null
         };
 
+        objectAssignPolyfill();
+        nodeListForEachPolyfill();
         opt = Object.assign({}, opt, options);
 
         let autocomplete = getElement(opt.selector);
         if(!autocomplete){
-            console.log(`Couldn't find element with '${opt.selector}' selector.`);
+            console.log("Couldn't find element with " + opt.selector + " selector.");
             return;
         }
 
         let copyright = autocomplete.innerHTML.trim();
 
+        let notFoundElement;
+        let copyrightElement;
+        let notFoundElementText;
+        switch (opt.lang){
+            case 'en':
+                notFoundElementText = 'Nothing found, try to change keywords';
+                poweredElementText = '';
+                break;
+            case 'ru':
+                notFoundElementText = 'К сожалению, ничего не найдено, попробуйте изменить строку поиска';
+                poweredElementText = '';
+                break;
+            default:
+                notFoundElementText = 'На жаль, нічого не знайдено, спробуйте змінити запит';
+                poweredElementText = '';
+        }
+                
         autocomplete.classList.add('visicom-autocomplete');    
         autocomplete.style.width = opt.width;
         autocomplete.style.height = opt.height;
@@ -51,7 +71,7 @@ let visicomAutoComplete = (function(){
         input.setAttribute('autocapitalize', 'off');
         input.setAttribute('spellcheck', 'false');
         
-        let suggestsDiv = document.createElement('div');   
+        let suggestsDiv = document.createElement('ul');   
         suggestsDiv.classList.add('visicom-suggests'); 
         
         let closeDiv = document.createElement('button');
@@ -63,14 +83,14 @@ let visicomAutoComplete = (function(){
         autocomplete.appendChild(suggestsDiv);    
         autocomplete.appendChild(closeDiv);    
 
-        if(!copyright || !copyright.includes('href="https://api.visicom.ua/"')){
+        if(!copyright || copyright.indexOf('href="https://api.visicom.ua/"') < 0){
             console.log('Visicom link not available.');
             return;
         }  
         autocomplete.removeChild(autocomplete.firstElementChild);
 
         if(!opt.apiKey && !opt.proxyApiGeocodeUrl && !opt.proxyApiFeatureUrl){
-            console.log(`You didn't specify your API key.`);
+            console.log("You didn't specify your API key.");
             return;
         }
         
@@ -83,33 +103,30 @@ let visicomAutoComplete = (function(){
             if(typeof L === 'undefined' || L === null){
                 console.log('Leaflet object is not available. Cannot create marker object.');
             }else{
-                let iconSVG =  `<svg xmlns="http://www.w3.org/2000/svg" 
-                                        width="24" height="24" viewBox="0 0 24 24">
-
-                                    <defs>         
-                                        <filter id="blur1" x="-100%" y="-100%" width="400%" height="400%">             
-                                            <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                                        </filter>
-                                    </defs>
-                                    
-                                    <style>
-                                        .selected-bg {
-                                            fill: #808080;
-                                            filter: url(#blur1);
-                                        }
-                                        .selected-fill {
-                                            fill: #ffffff;
-                                            stroke: #ff0000;
-                                            stroke-width: 1.7px;
-                                        }
-                                    </style>    
-
-                                    <g>
-                                        <circle class="selected-bg" cx="12" cy="12" r="9"/>           
-                                        <circle class="selected-fill" cx="11" cy="11" r="9" />
-                                        <path fill="#ff0000" d="m11 5.7c-2.1285 0-3.85 1.7215-3.85 3.85 0 2.8875 3.85 7.15 3.85 7.15s3.85-4.2625 3.85-7.15c0-2.1285-1.7215-3.85-3.85-3.85zm0 5.225c-0.759 0-1.375-0.616-1.375-1.375s0.616-1.375 1.375-1.375 1.375 0.616 1.375 1.375-0.616 1.375-1.375 1.375z"/>
-                                    </g>  
-                                </svg>`;
+                let iconSVG =  "<svg xmlns='http://www.w3.org/2000/svg' " +
+                                        "width='24' height='24' viewBox='0 0 24 24'>" +
+                                    "<defs>" +         
+                                        "<filter id='blur1' x='-100%' y='-100%' width='400%' height='400%'>" +              
+                                            "<feGaussianBlur stdDeviation='2'></feGaussianBlur>" +
+                                        "</filter>" + 
+                                    "</defs>" +                                     
+                                    "<style>" + 
+                                        ".selected-bg {" + 
+                                            "fill: #808080;" + 
+                                            "filter: url(#blur1);" + 
+                                        "}" +
+                                        ".selected-fill {" +
+                                            "fill: #ffffff;" +
+                                            "stroke: #ff0000;" +
+                                            "stroke-width: 1.7px;" +
+                                        "}" +
+                                    "</style>" +
+                                    "<g>" +
+                                        "<circle class='selected-bg' cx='12' cy='12' r='9'/>" +           
+                                        "<circle class='selected-fill' cx='11' cy='11' r='9' />" +
+                                        "<path fill='#ff0000' d='m11 5.7c-2.1285 0-3.85 1.7215-3.85 3.85 0 2.8875 3.85 7.15 3.85 7.15s3.85-4.2625 3.85-7.15c0-2.1285-1.7215-3.85-3.85-3.85zm0 5.225c-0.759 0-1.375-0.616-1.375-1.375s0.616-1.375 1.375-1.375 1.375 0.616 1.375 1.375-0.616 1.375-1.375 1.375z'/>" +
+                                    "</g>" +
+                                "</svg>";
                 opt.marker = L.marker([], {
                     icon: L.divIcon({
                         html: iconSVG,
@@ -138,11 +155,11 @@ let visicomAutoComplete = (function(){
                     suggestsDiv.classList.remove('open');
 
                     // Search for custom features
-                    opt.customFeatures.forEach(feat => {
+                    opt.customFeatures.forEach(function(feat){
                         if(feat.keywords.toLowerCase().includes(searchText.toLocaleLowerCase()))
                             suggests.push({
                                 html: trimToLength(feat.html, searchText, true),
-                                feature: {coords: feat.coords},
+                                feature: {coords: feat.coords}
                             });
                     });
 
@@ -162,23 +179,23 @@ let visicomAutoComplete = (function(){
 
                     results = [];
                     makeGeocodeRequest(searchText)
-                        .then(json =>{
+                        .then(function(json){
                             if(json.type === 'FeatureCollection'){
                                 results = json.features;
                             }else if(json.type === 'Feature'){
                                 results.push(json);
                             }                    
                             
-                            results.forEach(res => {
+                            results.forEach(function(res){
                                 if(res.properties.name || res.properties.vitrine)
                                     suggests.push({
-                                            html: feature2content(res, searchText, true),
+                                            html: feature2content(res, searchText, false),
                                             feature: res
                                         });
                             });
                             renderSuggests();
                         })
-                        .catch(err => {
+                        .catch(function(err){
                             console.log('Error in API request: ' + err);
                             clear();
                         });
@@ -193,12 +210,17 @@ let visicomAutoComplete = (function(){
             // Esc pressed
             if (e.keyCode === 27){
                 clear();
+                input.blur();
             }                
         });
 
         addEvent(suggestsDiv, 'click', function(e){
+            if(suggests.length === 0)
+                return;
             let selected = Array.prototype.indexOf.call(e.target.parentNode.children, e.target);
-            suggestsDiv.childNodes.forEach(el => el.classList.remove('selected'));
+            if(selected >= suggests.length)
+                return;
+            suggestsDiv.childNodes.forEach(function(el){el.classList.remove('selected')});
             selectedIndex = selected;
             suggestsDiv.childNodes[selectedIndex].classList.add('selected');
             suggestSelected(selected);
@@ -223,7 +245,7 @@ let visicomAutoComplete = (function(){
                     wasClosed = true;
                 }
 
-                suggestsDiv.childNodes.forEach(el => el.classList.remove('selected'));
+                suggestsDiv.childNodes.forEach(function(el){el.classList.remove('selected')});
 
                 if(e.keyCode === 38 && !wasClosed)
                     selectedIndex = selectedIndex < 0 ? suggests.length - 1 : selectedIndex - 1;
@@ -241,25 +263,34 @@ let visicomAutoComplete = (function(){
         });
 
         addEvent(input, 'focus', function(e){
-            if(suggests.length > 0 && !suggestsDiv.classList.contains('open')){
+            if((suggests.length > 0 && !suggestsDiv.classList.contains('open')) ||
+                    suggestsDiv.contains(notFoundElement)){
                 suggestsDiv.classList.add('open');
             }
         });
 
         addEvent(input, 'click', function(e){
-            if(suggests.length > 0 && !suggestsDiv.classList.contains('open')){
+            if((suggests.length > 0 && !suggestsDiv.classList.contains('open')) ||
+                    suggestsDiv.contains(notFoundElement)){
                 suggestsDiv.classList.add('open');
             }
         });
 
         addEvent(closeDiv, 'click', function(){
             clear();
+            input.focus();
         });
 
         addEvent(getElement('body'), 'click', function(e){
-            if(e.target == this){
+            if(e.target !== suggestsDiv && e.target !== input &&
+                    e.target !== closeDiv &&
+                    (!suggestsDiv.hasChildNodes() || 
+                        (suggestsDiv.hasChildNodes() &&
+                        [].slice.call(suggestsDiv.childNodes).every(function(el){return e.target !== el;})
+                        )
+                    )
+                ){
                 suggestsDiv.classList.remove('open');
-                input.blur();
             }
         });
 
@@ -286,52 +317,75 @@ let visicomAutoComplete = (function(){
             selectedIndex = -1;
             closeDiv.classList.remove('visible');
             suggestsDiv.classList.remove('open');
-            input.value = '';
-            input.focus();           
+            input.value = '';                       
+            if(opt.displayDivSelector && document.querySelector(opt.displayDivSelector)){
+                document.querySelector(opt.displayDivSelector).innerHTML = '';
+            }
+            if(suggestsDiv.contains(notFoundElement)){
+                suggestsDiv.removeChild(notFoundElement);
+            }
+            if(suggestsDiv.contains(copyrightElement)){
+                suggestsDiv.removeChild(copyrightElement);
+            }
             if(opt.map && opt.marker)
-                opt.map.removeLayer(opt.marker); 
+                opt.map.removeLayer(opt.marker);   
         }
 
         function makeGeocodeRequest(text){     
             let url = opt.proxyApiGeocodeUrl ?
-                `${opt.proxyApiGeocodeUrl}?text=${opt.searchTextPrefix} ${text}&lang=${opt.lang}&key=${opt.apiKey}&limit=${opt.suggestsLimit}` :
-                `${opt.apiUrl.replace('{lang}', opt.lang)}/geocode.json?text=${opt.searchTextPrefix} ${text}&key=${opt.apiKey}&limit=${opt.suggestsLimit}`;       
-            return fetch(url)
-                .then(data => data.json());                
+                opt.proxyApiGeocodeUrl + '?text=' +opt.searchTextPrefix + text + '&lang=' + opt.lang + '&key=' + opt.apiKey + '&limit=' + opt.suggestsLimit :
+                opt.apiUrl.replace('{lang}', opt.lang) + '/geocode.json?text=' + opt.searchTextPrefix + text + '&key=' + opt.apiKey + '&limit=' + opt.suggestsLimit;       
+            return fetch(encodeURI(url))
+                .then(function(data){return data.json();});                
         }
 
         function makeFeatureRequest(feature_id){            
             let url = opt.proxyApiFeatureUrl ?
-                `${opt.proxyApiFeatureUrl}?feature_id=${feature_id}&lang=${opt.lang}&key=${opt.apiKey}` :
-                `${opt.apiUrl.replace('{lang}', opt.lang)}/feature/${feature_id}.json?key=${opt.apiKey}`;       
-            return fetch(url)
-                .then(data => data.json());  
+                opt.proxyApiFeatureUrl + '?feature_id=' + feature_id + '&lang=' + opt.lang + '&key=' + opt.apiKey :
+                opt.apiUrl.replace('{lang}', opt.lang) + '/feature/' + feature_id + '.json?key=' + opt.apiKey;       
+            return fetch(encodeURI(url))
+                .then(function(data){return data.json();});  
         }
         
         function renderSuggests(){
             suggests = suggests.slice(0, opt.suggestsLimit);
             suggestsDiv.innerHTML = '';
             let output = '';
-            suggests.forEach(suggest => {
-                output += '<div>';
+            suggests.forEach(function(suggest){
+                output += '<li';
+                if(suggest.feature && suggest.feature.properties && suggest.feature.properties.categories){
+                    output += ' class="' + suggest.feature.properties.categories.substring(0, suggest.feature.properties.categories.indexOf('_')) + '"';
+                }
+                output += '>';
                 output += suggest.html;
-                output += '</div>';
+                output += '</li>';
             });
 
-            if(output)
-                suggestsDiv.classList.add('open');            
-
-            suggestsDiv.innerHTML = output;
+            if(output){
+                suggestsDiv.innerHTML = output;          
+            }else{
+                notFoundElement = document.createElement('li');
+                notFoundElement.innerHTML = notFoundElementText;
+                notFoundElement.classList.add('not-found');  
+                suggestsDiv.appendChild(notFoundElement);                
+            }
+            poweredElement = document.createElement('li');
+            poweredElement.innerHTML = poweredElementText;
+            poweredElement.classList.add('powered-by');
+            suggestsDiv.appendChild(poweredElement);
+            suggestsDiv.classList.add('open');
         }
 
         function suggestSelected(selected){            
             input.value = suggests[selected].html.replace('<strong>', '').replace('</strong>', '');            
             input.focus();
-            suggestsDiv.classList.remove('open');
-            opt.onSuggestSelected(suggests[selected]);
-            if(opt.map){
-                renderOnMap(suggests[selected]);
-            }
+            setTimeout(function(){
+                suggestsDiv.classList.remove('open');
+                opt.onSuggestSelected(suggests[selected]);
+                if(opt.map){
+                    renderOnMap(suggests[selected]);
+                }
+            }, 0);            
         }
 
         function renderOnMap(suggest){
@@ -346,7 +400,7 @@ let visicomAutoComplete = (function(){
                 }                  				
             }else{
                 makeFeatureRequest(suggest.feature.id)
-                    .then(data => {                    
+                    .then(function(data){                    
                         if(data.geometry.type === 'Point'){                            
                             opt.map.setView([data.geometry.coordinates[1], data.geometry.coordinates[0]], 19);	                                  
                             if(opt.marker){
@@ -363,7 +417,7 @@ let visicomAutoComplete = (function(){
                             opt.map.fitBounds(getBounds(data), {animate: true, maxZoom: 17});
                         }								
                     })
-                    .catch(err => {
+                    .catch(function(err){
                         console.log('Error in API request: ' + err);
                         clear();
                     });
@@ -420,11 +474,11 @@ let visicomAutoComplete = (function(){
             let quer = que.toLowerCase();
             return description.indexOf(quer) < 0 ? 
                     dat :
-                    `${dat.substring(0, description.indexOf(quer))}<strong>${dat.substring(description.indexOf(quer), description.indexOf(quer) + que.length)}</strong>${dat.substring(description.indexOf(quer) + que.length)}`;
+                    dat.substring(0, description.indexOf(quer)) + '<strong>' + dat.substring(description.indexOf(quer), description.indexOf(quer) + que.length) + '</strong>' + dat.substring(description.indexOf(quer) + que.length);
         }
 
         function compact(array){
-            return array.filter(el => el);
+            return array.filter(function(el){return el;});
         }
 
         function getBounds(feature){
@@ -447,7 +501,7 @@ let visicomAutoComplete = (function(){
                 return result;
             result.push([coord.lng, coord.lat]);
             return result;    
-        }
+        };
 
         Coordparsing.format = function(latlng){
             function _split( position ){
@@ -481,8 +535,8 @@ let visicomAutoComplete = (function(){
                 .replace('MM', lng.minutes)  
                 .replace('SS', lng.seconds);  
 
-            return `${lat} ${lng}`;
-        }
+            return '' + lat + lng;
+        };
 
         Coordparsing.parse = function(text)
         {
@@ -542,11 +596,11 @@ let visicomAutoComplete = (function(){
             
             // if numbers count is less then not-numbers count
             let m = text.match(/\d/g);
-            if(m == null) 
+            if(m === null) 
                 return null;
-            let digits = (m == null) ? 0 : m.length;
+            let digits = (m === null) ? 0 : m.length;
             m = text.match(/\D/g);
-            let nodigits = (m == null) ? 0 : m.length;
+            let nodigits = (m === null) ? 0 : m.length;
             if(digits*1.5 <= nodigits) 
                 return null;
             text = text.replace(/,/igm,'.');
@@ -564,16 +618,54 @@ let visicomAutoComplete = (function(){
                 if (/[news]/ig.exec(text) !== null) 
                     return detectLatLng(text, [parseFloat(m[0]), parseFloat(m[1])]);         
                 else
-                    return {'lat':parseFloat(m[0]), 'lng':parseFloat(m[1])}
+                    return {'lat':parseFloat(m[0]), 'lng':parseFloat(m[1])};
             } 
             return null;
-        }
+        };
 
         return {
-            clear: clear,
-        }
+            clear: clear
+        };
     }
 
+    function objectAssignPolyfill(){
+        if (typeof Object.assign !== 'function') {
+            Object.assign = function(target, varArgs) {
+              'use strict';
+              if (target === null) { 
+                throw new TypeError('Cannot convert undefined or null to object');
+              }
+
+              var to = Object(target);
+
+              for (var index = 1; index < arguments.length; index++) {
+                var nextSource = arguments[index];
+
+                if (nextSource !== null) { 
+                  for (var nextKey in nextSource) {
+                    
+                    if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                      to[nextKey] = nextSource[nextKey];
+                    }
+                  }
+                }
+              }
+              return to;
+            };
+        }
+    }
+    
+    function nodeListForEachPolyfill(){
+        if (window.NodeList && !NodeList.prototype.forEach) {
+            NodeList.prototype.forEach = function (callback, thisArg) {
+                thisArg = thisArg || window;
+                for (var i = 0; i < this.length; i++) {
+                    callback.call(thisArg, this[i], i, this);
+                }
+            };
+        }
+    }
+    
     return visicomAutoCompleteFunction;
 })();
 

@@ -24,11 +24,11 @@ Get your API key and you are ready to use widget.
 Add imports on your page:
 
 ```html
-<link rel="stylesheet" href="https://api.visicom.ua/apps/visicom-autocomplete/visicom-autocomplete.min.css">
+<link rel="stylesheet" href="https://api.visicom.ua/apps/visicom-autocomplete.min.css">
 ```
 
 ```html
-<script src="https://api.visicom.ua/apps/visicom-autocomplete/visicom-autocomplete.min.js"></script>
+<script src="https://api.visicom.ua/apps/visicom-autocomplete.min.js"></script>
 ```
 
 Create element in your html file ('a' tag will dispappear, you shouldn't remove it):
