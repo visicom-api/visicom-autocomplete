@@ -78,9 +78,10 @@ Full example:
 <!DOCTYPE html>
 <html lang="uk">
   <head>
+      
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-      <link rel="stylesheet" href="https://api.visicom.ua/apps/visicom-autocomplete/visicom-autocomplete.min.css">
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css">
+      <link rel="stylesheet" href="https://api.visicom.ua/apps/visicom-autocomplete.min.css">      
   </head>
   <body>
     
@@ -89,9 +90,9 @@ Full example:
     </div>
     <div id="map" style="width: 800px; height: 400px;"></div>
 
-  </body>
-  <script type="text/javascript" src="https://api.visicom.ua/apps/visicom-autocomplete/visicom-autocomplete.min.js"></script>
+  </body>  
   <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+  <script type="text/javascript" src="https://api.visicom.ua/apps/visicom-autocomplete.min.js"></script>
   <script>
 
     document.addEventListener('DOMContentLoaded', function(){
