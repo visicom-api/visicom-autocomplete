@@ -153,7 +153,7 @@ Full example:
 
 ## Changelog
 
-### Version 0.0.2 beta - 2018/10/25
+### Version 0.0.2 beta - 2019/07/26
 
 * Add includeCategories, excludeCategories parameters
 
