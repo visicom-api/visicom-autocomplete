@@ -125,8 +125,10 @@ Full example:
             height : '35px',                         // height of search input
             map: map,                                // map object to zoom on it
             suggestsLimit : 5,                       // limit of suggests to display
+            includeCategories: [],		               // include features only with this categories
+			      excludeCategories: [],					         // exclude features with this categories
             maxCharsInSuggest: 55,                   // max chars to display in suggest
-            lang : 'local',                             // language for searching
+            lang : 'local',                          // language for searching
             onSuggestSelected : suggest => console.log('Suggest selected: ' + (suggest.html)), 
             customFeatures: [{                       // custom feature objects
                     html: 'наша фирма',
