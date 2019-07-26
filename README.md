@@ -155,6 +155,10 @@ Full example:
 
 ### Version 0.0.2 beta - 2018/10/25
 
+* Add includeCategories, excludeCategories parameters
+
+### Version 0.0.2 beta - 2018/10/25
+
 * Add custom feature objects support
 
 ### Version 0.0.2 beta - 2018/10/24
