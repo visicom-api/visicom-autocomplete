@@ -5,7 +5,7 @@ An extremely lightweight and powerful geocode completion suggester.
 
 Released under the MIT License: http://www.opensource.org/licenses/mit-license.php
 
-![visicom-autocomplete examples](examples.gif)
+![visicom-autocomplete examples](autocomplete.gif)
 
 ## Features
 
