@@ -295,6 +295,7 @@ let visicomAutoComplete = (function(){
                     suggestsDiv.contains(notFoundElement)){
                 suggestsDiv.classList.add('open');
             }
+            e.stopPropagation();
         });
 
         addEvent(input, 'click', function(e){
@@ -302,6 +303,7 @@ let visicomAutoComplete = (function(){
                     suggestsDiv.contains(notFoundElement)){
                 suggestsDiv.classList.add('open');
             }
+            e.stopPropagation();
         });
 
         addEvent(closeDiv, 'click', function(){
