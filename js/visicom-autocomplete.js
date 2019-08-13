@@ -136,6 +136,7 @@ let visicomAutoComplete = (function(){
                     }),
                     draggable: true
                 });
+                L.DomEvent.disableClickPropagation(autocomplete);
             }
         }
 
