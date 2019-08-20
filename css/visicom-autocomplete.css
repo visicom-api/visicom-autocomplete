@@ -32,6 +32,7 @@
     font-size: 14px;
     overflow: hidden;
     white-space: nowrap;
+    height: 100%;
     text-overflow: ellipsis;
     border: 1px solid #A3A3A3;
     padding: 11px 45px 11px 11px;
