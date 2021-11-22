@@ -1,5 +1,5 @@
 /*
-    JavaScript visicomAutoComplete v0.0.2
+    JavaScript visicomAutoComplete v0.0.3
     Copyright (c) 2019 Andrey Kotelnikov / Visicom
     GitHub: https://github.com/visicom-api/visicom-autocomplete
     License: http://www.opensource.org/licenses/mit-license.php
@@ -11,7 +11,7 @@ let visicomAutoComplete = (function(){
 
         let opt = {
             selector : '#visicom-autocomplete',
-            apiUrl : 'https://api.visicom.ua/data-api/4.0/{lang}/',
+            apiUrl : 'https://api.visicom.ua/data-api/5.0/{lang}/',
             proxyApiGeocodeUrl: '',
             proxyApiFeatureUrl: '',
             apiKey : '',
@@ -26,6 +26,8 @@ let visicomAutoComplete = (function(){
             maxCharsInSuggest: 55,
             lang : 'local',
             searchTextPrefix: '',
+            intersect : '',
+            contains: '',
             includeCategories: [],
             excludeCategories: [],
             customFeatures: [],
@@ -189,32 +191,6 @@ let visicomAutoComplete = (function(){
                                 results.push(json);
                             }                    
                             
-                            if(opt.excludeCategories && opt.excludeCategories.length > 0){
-                                results = results.filter(function(feat){
-                                    if(!feat.properties || !feat.properties.categories){
-                                        return true;
-                                    }
-
-                                    return feat.properties.categories.split(",").every(function(cat){
-                                        return !opt.excludeCategories.includes(cat);
-                                    });
-
-                                });
-                            }
-
-                            if(opt.includeCategories && opt.includeCategories.length > 0){
-                                results = results.filter(function(feat){
-                                    if(!feat.properties || !feat.properties.categories){
-                                        return true;
-                                    }
-
-                                    return feat.properties.categories.split(",").some(function(cat){
-                                        return opt.includeCategories.includes(cat);
-                                    });
-
-                                });
-                            }
-
                             results.forEach(function(res){
                                 if(res.properties.name || res.properties.vitrine)
                                     suggests.push({
@@ -363,9 +339,17 @@ let visicomAutoComplete = (function(){
         }
 
         function makeGeocodeRequest(text){     
+            let ci_param = opt.includeCategories.join(",");
+            ci_param = ci_param ? "&categories=" + ci_param : "";
+            let ce_param = opt.excludeCategories.join(",");
+            ce_param = ce_param ? "&categories_exclude=" + ce_param : "";
+            let intersect = opt.intersect;
+            intersect = intersect ? "&intersect=" + intersect : "";
+            let contains = opt.contains;
+            contains = contains ? "&contains=" + contains : "";
             let url = opt.proxyApiGeocodeUrl ?
-                opt.proxyApiGeocodeUrl + '?text=' +opt.searchTextPrefix + text + '&lang=' + opt.lang + '&key=' + opt.apiKey + '&limit=' + opt.suggestsLimit :
-                opt.apiUrl.replace('{lang}', opt.lang) + '/geocode.json?text=' + opt.searchTextPrefix + text + '&key=' + opt.apiKey + '&limit=' + opt.suggestsLimit;       
+                opt.proxyApiGeocodeUrl + '?text=' +opt.searchTextPrefix + text + '&lang=' + opt.lang + ci_param + ce_param + intersect + contains + '&key=' + opt.apiKey + '&limit=' + opt.suggestsLimit :
+                opt.apiUrl.replace('{lang}', opt.lang) + '/geocode.json?text=' + opt.searchTextPrefix + text + ci_param + ce_param + intersect + contains + '&key=' + opt.apiKey + '&limit=' + opt.suggestsLimit;       
             return fetch(encodeURI(url))
                 .then(function(data){return data.json();});                
         }

@@ -65,6 +65,8 @@ Now we have such options:
 * marker - custom Leaflet marker (optional)
 * proxyApiGeocodeUrl - your proxy url. Geocode requests will be send to that url. You don't need to specify API key. You'll recieve such parameters in GET request: text (search text), lang, key (API key), limit (suggestsLimit) (optional)
 * proxyApiFeatureUrl - your proxy url. Feature requests will be send to that url. You don't need to specify API key. You'll recieve such parameters in GET request: feature_id (feature id you are searching), lang, key (API key) (optional)
+* intersect - only features whose geometry intersects with specified geometry or object (in such case feature ID should be used) will be included in results. (optional, string)
+* contains - only features whose geometry is inside of specified geometry or object (in such case feature ID should be used) will be included in results. (optional, string)
 * includeCategories - only features with this categories will be included in results. (optional, array of strings, default = [])
 * excludeCategories - features with this categories will be excluded from results. (optional, array of strings, default = [])
 * customFeatures - add your features. They will be displayed first in search results. (optional, array of objects, default = []). Each object should contain 3 fields: html (text, displayed in suggest), keywords (text field, which contains words for searching), coords (array of two coordinate values of your feature)
@@ -152,6 +154,12 @@ Full example:
 * Edge
 
 ## Changelog
+
+### Version 0.0.3 beta - 2021/11/22
+
+* Changed API version to 5.0
+* Updated code related to includeCategories, excludeCategories parameters
+* Added intersect, contains parameters
 
 ### Version 0.0.2 beta - 2019/07/26
 
