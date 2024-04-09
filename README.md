@@ -133,13 +133,13 @@ Full example:
             lang : 'local',                          // language for searching
             onSuggestSelected : suggest => console.log('Suggest selected: ' + (suggest.html)), 
             customFeatures: [{                       // custom feature objects
-                    html: 'наша фирма',
-                    keywords: 'киев вербицкого наша фирма',
+                    html: 'наша фірма',
+                    keywords: 'Київ вербицького наша фірма',
                     coords:[50, 30],
                 },
                 {
-                    html: 'тестовый вариант',
-                    keywords: 'чернигов шевченко 23',
+                    html: 'тестовий варіант',
+                    keywords: 'чернігів шевченко 23',
                     coords:[50.46537, 30.48019],
                 }],
         });
