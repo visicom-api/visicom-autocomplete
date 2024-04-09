@@ -1,6 +1,6 @@
 /*
     JavaScript visicomAutoComplete v0.0.3
-    Copyright (c) 2019 Andrey Kotelnikov / Visicom
+    Copyright (c) 2019 Andrii Kotelnikov / Visicom
     GitHub: https://github.com/visicom-api/visicom-autocomplete
     License: http://www.opensource.org/licenses/mit-license.php
 */
